@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 public class Client {
     public static void main (String[] args){
@@ -18,9 +19,31 @@ public class Client {
             DataOutputStream dos = new DataOutputStream(bos);
 
             //now we will see this message at the server side 
-            dos.writeUTF("Hello from client");
-            dos.flush();
-            System.out.println("Message has been sent to server");
+            // dos.writeUTF("Hello from client");
+            // dos.flush();
+            // System.out.println("Message has been sent to server");
+
+            Scanner inputSc = new Scanner(System.in);
+            String line;
+
+
+            //as long as something's in terminal
+            while ((line = inputSc.nextLine()) != null){
+
+                //end loop clause. closes our connection to the server
+                if (line.equalsIgnoreCase("close")){
+                    System.out.println("Exit from shell");
+                    break;
+                }
+
+                //prints out the line 
+                dos.writeUTF(line);
+                dos.flush();
+                System.out.println("Message sent to server: " + line);
+            }
+            //clean up by closing socket and scanner
+            cs.close();
+            inputSc.close();
 
         }catch (UnknownHostException e){
             System.out.println("Unable to reach the HOST");

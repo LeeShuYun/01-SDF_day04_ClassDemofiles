@@ -28,7 +28,7 @@ public class Server {
             BufferedInputStream bis = new BufferedInputStream(is);
             DataInputStream dis = new DataInputStream(bis);
 
-            //reads the data from the stream, if available. or closes 
+            /*//reads exactly one line from the stream, if available. or closes 
             //in this case we should see "Hello from client"
             String msg = dis.readUTF();
 
@@ -36,6 +36,20 @@ public class Server {
             System.out.println("MSG received ->" + msg);
 
             //server closes the socket after getting the message
+            socket.close();*/
+
+            //a loop to make sure the server keeps taking inputs
+            String fromClient = dis.readUTF();
+            while (!fromClient.equalsIgnoreCase("close") && fromClient != null ){
+                //process and display the message we received with a format
+                System.out.println("Received msg from client: " + fromClient);
+
+                //read next line from input stream
+                fromClient = dis.readUTF();
+
+                //since the client sending a close condition handles breaking from the loop, 
+                //we can simply put our close socket command after this while loop
+            }
             socket.close();
 
         }
